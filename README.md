@@ -1,4 +1,4 @@
-# Predictive Maintenance of Rotating Machinery — Bearing Fault Diagnosis via Vibration Analysis
+# Predictive Maintenance of Rotating Machinery Bearing Fault Diagnosis via Vibration Analysis
 
 Classifies the health state of a rolling-element bearing from raw accelerometer
 vibration, using the **CWRU (Case Western Reserve University) bearing dataset**.
@@ -12,14 +12,14 @@ Two complementary modelling tracks are built and compared:
 
 | Model | Features | Test accuracy |
 |---|---|---|
-| SVM / RF / XGBoost | time-domain only (9 feats) | 93.5 – 95.0 % |
+| SVM / RF / XGBoost | time-domain only (9 feats) | 93.5 - 95.0 % |
 | SVM | time + FFT + envelope (28 feats) | 98.3 % |
 | Random Forest | time + FFT + envelope (28 feats) | 98.7 % |
 | **XGBoost** | time + FFT + envelope (28 feats) | **98.9 %** |
 | **1D-CNN** | raw waveform (2048 samples) | **99.6 %** |
 
 **Headline finding:** adding frequency-domain (FFT) and envelope-spectrum
-features lifts the classical models by ~4–5 accuracy points over the
+features lifts the classical models by 4–5 accuracy points over the
 time-domain-only baseline. The CNN matches this *without* manual feature
 engineering by learning filters directly from the signal.
 
@@ -29,7 +29,7 @@ A rolling bearing has four parts that can fail: the **outer race**, **inner
 race**, **rolling balls**, and **cage**. A local defect (a pit/spall) causes a
 sharp mechanical impact every time a ball rolls over it. These impacts repeat at
 a characteristic frequency that depends *only on bearing geometry and shaft
-speed* — so the repetition rate tells you **which** part is damaged.
+speed* so the repetition rate tells you **which** part is damaged.
 
 For the CWRU drive-end bearing (SKF 6205, shaft ≈ 29.5 Hz at 1772 rpm):
 
@@ -58,7 +58,7 @@ at three severities each (0.007", 0.014", 0.021" defect diameter).
         └─► RAW WINDOWS (2048 samples) ─► 1D-CNN
 ```
 
-### Feature families — what each one "sees"
+### Feature families :what each one "sees"
 
 - **Time-domain stats** capture *how impulsive / energetic* the vibration is.
   `rms` rises with fault energy; `kurtosis` and `crest` spike when sharp impacts
@@ -68,7 +68,7 @@ at three severities each (0.007", 0.014", 0.021" defect diameter).
   shape separate fault types.
 - **Envelope-spectrum features** are the physics-aware core. A defect
   *amplitude-modulates* a high-frequency structural resonance. Band-passing
-  (2–6 kHz), taking the **Hilbert envelope** (demodulation), then FFT-ing the
+  (2-6 kHz), taking the **Hilbert envelope** (demodulation), then FFT-ing the
   envelope reveals a peak at the defect frequency. Reading the amplitude at
   BPFO / BPFI / BSF directly encodes *which element* is damaged. This is the
   standard technique in industrial condition monitoring.
@@ -103,9 +103,9 @@ python main.py          # full pipeline
   caveat and a natural next step.
 - **Window-level split, not recording-level.** Train/test windows come from the
   same continuous recordings (standard in CWRU papers). Because adjacent windows
-  share operating conditions, the ~99% numbers are *optimistic* relative to a
+  share operating conditions, the 99% numbers are *optimistic* relative to a
   truly held-out machine. A stricter evaluation splits by time segment or by
-  recording — recommended before claiming production readiness.
+  recording recommended before claiming production readiness.
 - **Seeded (artificial) faults.** CWRU faults are EDM-machined, cleaner than
   natural wear. Field signals are noisier.
 - **Validation done:** our recomputed time-domain `rms` matches the original
@@ -115,6 +115,6 @@ python main.py          # full pipeline
 
 The provided CSV had only the 9 time-domain features and capped the classical
 models at ~94–95%. Going back to the **raw signal** unlocked:
-- real **FFT/spectral** features and **envelope analysis** → +4–5% (→ 98.9%),
+- real **FFT/spectral** features and **envelope analysis** → +4-5% (→ 98.9%),
 - a genuine **1D-CNN** on the waveform → 99.6%, with the network implicitly
   learning frequency-selective filters that the engineered features encode by hand.
