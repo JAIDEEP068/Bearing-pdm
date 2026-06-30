@@ -114,7 +114,7 @@ python main.py          # full pipeline
 ## What FFT and the CNN added (the point of the project)
 
 The provided CSV had only the 9 time-domain features and capped the classical
-models at ~94–95%. Going back to the **raw signal** unlocked:
+models at 94–95%. Going back to the **raw signal** unlocked:
 - real **FFT/spectral** features and **envelope analysis** → +4-5% (→ 98.9%),
 - a genuine **1D-CNN** on the waveform → 99.6%, with the network implicitly
   learning frequency-selective filters that the engineered features encode by hand.
