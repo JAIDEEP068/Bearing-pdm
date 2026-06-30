@@ -15,7 +15,7 @@ from scipy.stats import skew, kurtosis
 from scipy.signal import hilbert, butter, filtfilt
 
 FS = 48000          # sampling rate (Hz)
-WIN = 2048          # window length (samples) -- matches the original CSV
+WIN = 2048          # window length (samples) 
 # SKF 6205-2RS JEM drive-end bearing, defect-frequency multipliers (x shaft freq)
 MULT = {"BPFO": 3.5848, "BPFI": 5.4152, "BSF": 4.7135, "FTF": 0.39828}
 
@@ -67,7 +67,7 @@ def envelope_features(x, fr, fs=FS):
     env = env - env.mean()                       # remove DC so 0 Hz doesn't dominate
     E = np.abs(np.fft.rfft(env * np.hanning(len(env))))
     f = np.fft.rfftfreq(len(env), 1/fs)
-    res = f[1] - f[0]                             # bin width (~23.4 Hz)
+    res = f[1] - f[0]                             # bin width (23.4 Hz)
     Esum = E.sum() + 1e-12
 
     def amp_at(freq, harmonics=(1,2,3), tol_bins=2):
